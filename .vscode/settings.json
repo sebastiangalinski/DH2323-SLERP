@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "DH2323_proj.sln"
+    "dotnet.defaultSolution": "DH2323-SLERP.sln"
 }

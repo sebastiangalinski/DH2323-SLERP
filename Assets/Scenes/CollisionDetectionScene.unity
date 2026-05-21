@@ -540,7 +540,7 @@ GameObject:
   - component: {fileID: 537502875}
   - component: {fileID: 537502876}
   - component: {fileID: 537502877}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Tank
   m_TagString: Tank
   m_Icon: {fileID: 0}
@@ -622,6 +622,8 @@ MonoBehaviour:
   m_Speed: 12
   m_TurnSpeed: 180
   m_WheelRotateSpeed: 90
+  m_TurretRotationMode: 1
+  m_TurretRotationSpeed: 5
 --- !u!65 &537502877
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -662,7 +664,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 610314767}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -780,7 +782,7 @@ GameObject:
   - component: {fileID: 760721280}
   - component: {fileID: 761524128}
   - component: {fileID: 762490208}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-machinegun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -798,7 +800,7 @@ GameObject:
   - component: {fileID: 760721282}
   - component: {fileID: 761524130}
   - component: {fileID: 762490210}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-base cesta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -816,7 +818,7 @@ GameObject:
   - component: {fileID: 760721284}
   - component: {fileID: 761524132}
   - component: {fileID: 762490212}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-cadena de la torreta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -834,7 +836,7 @@ GameObject:
   - component: {fileID: 760721286}
   - component: {fileID: 761524134}
   - component: {fileID: 762490214}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-carcasa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -852,7 +854,7 @@ GameObject:
   - component: {fileID: 760721288}
   - component: {fileID: 761524136}
   - component: {fileID: 762490216}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-carcasa BUMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -870,7 +872,7 @@ GameObject:
   - component: {fileID: 760721290}
   - component: {fileID: 761524138}
   - component: {fileID: 762490218}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Maingun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -888,7 +890,7 @@ GameObject:
   - component: {fileID: 760721292}
   - component: {fileID: 761524140}
   - component: {fileID: 762490220}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-cesta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -906,7 +908,7 @@ GameObject:
   - component: {fileID: 760721294}
   - component: {fileID: 761524142}
   - component: {fileID: 762490222}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-compuerta torreta redonda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -924,7 +926,7 @@ GameObject:
   - component: {fileID: 760721296}
   - component: {fileID: 761524144}
   - component: {fileID: 762490224}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-COMUERTA CARCASA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -942,7 +944,7 @@ GameObject:
   - component: {fileID: 760721298}
   - component: {fileID: 761524146}
   - component: {fileID: 762490226}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-cuerda torreta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -960,7 +962,7 @@ GameObject:
   - component: {fileID: 760721300}
   - component: {fileID: 761524148}
   - component: {fileID: 762490228}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-EMBLEMA TRASERO DERECHO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -978,7 +980,7 @@ GameObject:
   - component: {fileID: 760721302}
   - component: {fileID: 761524150}
   - component: {fileID: 762490230}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-EMBLEMA TRASERO IZQUIERDO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -996,7 +998,7 @@ GameObject:
   - component: {fileID: 760721304}
   - component: {fileID: 761524152}
   - component: {fileID: 762490232}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-lateral derecho
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1014,7 +1016,7 @@ GameObject:
   - component: {fileID: 760721306}
   - component: {fileID: 761524154}
   - component: {fileID: 762490234}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-lateral izquierdo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1032,7 +1034,7 @@ GameObject:
   - component: {fileID: 760721308}
   - component: {fileID: 761524156}
   - component: {fileID: 762490236}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-laterales delanteros
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1050,7 +1052,7 @@ GameObject:
   - component: {fileID: 760721310}
   - component: {fileID: 761524158}
   - component: {fileID: 762490238}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-ORUGA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1068,7 +1070,7 @@ GameObject:
   - component: {fileID: 760721312}
   - component: {fileID: 761524160}
   - component: {fileID: 762490240}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-ORUGA1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1086,7 +1088,7 @@ GameObject:
   - component: {fileID: 760721314}
   - component: {fileID: 761524162}
   - component: {fileID: 762490242}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-pala
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1104,7 +1106,7 @@ GameObject:
   - component: {fileID: 760721316}
   - component: {fileID: 761524164}
   - component: {fileID: 762490244}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-puerta trasera1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1122,7 +1124,7 @@ GameObject:
   - component: {fileID: 760721318}
   - component: {fileID: 761524166}
   - component: {fileID: 762490246}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-puerta trasera2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1140,7 +1142,7 @@ GameObject:
   - component: {fileID: 760721320}
   - component: {fileID: 761524168}
   - component: {fileID: 762490248}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1158,7 +1160,7 @@ GameObject:
   - component: {fileID: 760721322}
   - component: {fileID: 761524170}
   - component: {fileID: 762490250}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1176,7 +1178,7 @@ GameObject:
   - component: {fileID: 760721324}
   - component: {fileID: 761524172}
   - component: {fileID: 762490252}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1194,7 +1196,7 @@ GameObject:
   - component: {fileID: 760721326}
   - component: {fileID: 761524174}
   - component: {fileID: 762490254}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1212,7 +1214,7 @@ GameObject:
   - component: {fileID: 760721328}
   - component: {fileID: 761524176}
   - component: {fileID: 762490256}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1230,7 +1232,7 @@ GameObject:
   - component: {fileID: 760721330}
   - component: {fileID: 761524178}
   - component: {fileID: 762490258}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1248,7 +1250,7 @@ GameObject:
   - component: {fileID: 760721332}
   - component: {fileID: 761524180}
   - component: {fileID: 762490260}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1266,7 +1268,7 @@ GameObject:
   - component: {fileID: 760721334}
   - component: {fileID: 761524182}
   - component: {fileID: 762490262}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1284,7 +1286,7 @@ GameObject:
   - component: {fileID: 760721336}
   - component: {fileID: 761524184}
   - component: {fileID: 762490264}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1302,7 +1304,7 @@ GameObject:
   - component: {fileID: 760721338}
   - component: {fileID: 761524186}
   - component: {fileID: 762490266}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1320,7 +1322,7 @@ GameObject:
   - component: {fileID: 760721340}
   - component: {fileID: 761524188}
   - component: {fileID: 762490268}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1338,7 +1340,7 @@ GameObject:
   - component: {fileID: 760721342}
   - component: {fileID: 761524190}
   - component: {fileID: 762490270}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1356,7 +1358,7 @@ GameObject:
   - component: {fileID: 760721344}
   - component: {fileID: 761524192}
   - component: {fileID: 762490272}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1374,7 +1376,7 @@ GameObject:
   - component: {fileID: 760721346}
   - component: {fileID: 761524194}
   - component: {fileID: 762490274}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1392,7 +1394,7 @@ GameObject:
   - component: {fileID: 760721348}
   - component: {fileID: 761524196}
   - component: {fileID: 762490276}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: rwheel8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1410,7 +1412,7 @@ GameObject:
   - component: {fileID: 760721350}
   - component: {fileID: 761524198}
   - component: {fileID: 762490278}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: lwheel1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1428,7 +1430,7 @@ GameObject:
   - component: {fileID: 760721352}
   - component: {fileID: 761524200}
   - component: {fileID: 762490280}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: "M-tela ca\xF1on"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1446,7 +1448,7 @@ GameObject:
   - component: {fileID: 760721354}
   - component: {fileID: 761524202}
   - component: {fileID: 762490282}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-torreta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1464,7 +1466,7 @@ GameObject:
   - component: {fileID: 760721356}
   - component: {fileID: 761524204}
   - component: {fileID: 762490284}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-torreta bump
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1482,7 +1484,7 @@ GameObject:
   - component: {fileID: 760721358}
   - component: {fileID: 761524206}
   - component: {fileID: 762490286}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: M-trampilla torreta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4169,7 +4171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 852878532}
   - component: {fileID: 852878533}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: GunBarrelEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5278,7 +5280,7 @@ GameObject:
   - component: {fileID: 1451864307}
   - component: {fileID: 1451864306}
   - component: {fileID: 1451864305}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: GunBarrelEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10776,7 +10778,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1929260754}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11193,7 +11195,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2126242019}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Secondgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}

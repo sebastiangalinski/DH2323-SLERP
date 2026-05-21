@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TurretRotationMode
+{
+    Instant,
+    SLERP,
+    Dampened
+}
+
 [RequireComponent(typeof(Rigidbody))]
 public class TankController : MonoBehaviour
 {
@@ -19,8 +26,10 @@ public class TankController : MonoBehaviour
     private List<GameObject> m_wheels = new List<GameObject>();
     private GameObject m_turret;
     private float camRayLength = 100f;          // The length of the ray from the camera into the scene.
-    public float m_TurretRotationSpeed = 5f;  // Adjust for faster/slower rotation
-    private Quaternion m_TargetTurretRotation;
+    
+    public TurretRotationMode m_TurretRotationMode = TurretRotationMode.SLERP;  // The rotation mode for the turret.
+    public float m_TurretRotationSpeed = 5f;    // Speed of turret rotation (used for SLERP and Dampened modes).
+    private Quaternion m_TargetTurretRotation;  // The target rotation for the turret.
 
 
 
@@ -139,18 +148,34 @@ public class TankController : MonoBehaviour
         // Perform the raycast and if it hits something on the floor layer...
         if (Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
         {
-            // Your code here.
+            // Calculate target rotation
             Vector3 turretToMouse = floorHit.point - m_turret.transform.position;  // get the direction from turret to mouse
             turretToMouse.y = 0f;  // Ignore the y axis.
-            Quaternion lookRotation = Quaternion.LookRotation(turretToMouse); // get where the turret should be looking
-            m_TargetTurretRotation = lookRotation;
+            m_TargetTurretRotation = Quaternion.LookRotation(turretToMouse); // get where the turret should be looking
         }
 
-        // Smoothly rotate towards the target using SLERP
-        m_turret.transform.rotation = Quaternion.Slerp(
-            m_turret.transform.rotation, 
-            m_TargetTurretRotation, 
-            m_TurretRotationSpeed * Time.deltaTime);
+        // Apply rotation based on the selected mode
+        switch (m_TurretRotationMode)
+        {
+            case TurretRotationMode.Instant:
+                m_turret.transform.rotation = m_TargetTurretRotation;
+                break;
 
+            case TurretRotationMode.SLERP:
+                m_turret.transform.rotation = Quaternion.Slerp(
+                    m_turret.transform.rotation,
+                    m_TargetTurretRotation,
+                    Time.deltaTime * m_TurretRotationSpeed
+                );
+                break;
+
+            case TurretRotationMode.Dampened:
+                // Use direction vector with Lerp for a more dampened feel
+                Vector3 currentForward = m_turret.transform.forward;
+                Vector3 targetForward = m_TargetTurretRotation * Vector3.forward;
+                Vector3 dampedForward = Vector3.Lerp(currentForward, targetForward, Time.deltaTime * m_TurretRotationSpeed * 0.5f);
+                m_turret.transform.rotation = Quaternion.LookRotation(dampedForward);
+                break;
+        }
     }
 }

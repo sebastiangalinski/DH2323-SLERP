@@ -74,3 +74,17 @@ The tank can now switch between three different movement modes:
   - There is no indicator of charging time for the user. Im thinking zooming out the camera should do the trick. 
 
 \*insert vids\*  
+
+[InstantRotVid]: videos/Flicker_SQUAD.mp4
+
+[SLERPVid]: videos/Flicker_SQUAD.mp4
+
+[SQUADFlickVid]: videos/Flicker_SQUAD.mp4
+
+[SQUADFixedVid]: videos/Flicker_SQUAD.mp4
+
+[DirectMovementVid]: videos/instantMovementt.mp4
+
+[AccelMovementVid]: videos/AccelMovementn.mp4
+
+[AccelDeaccelMovementVid]: videos/AccelDeaccelMovement.mp4

@@ -42,7 +42,7 @@ While SLERP interpolates smoothly between two rotations, SQUAD extends this idea
 
 Current problem: the turret seems to have a few fixed places where it wants to be. It basically flickers all the time. 
 
-\*Insert Gif of flickering\*
+[SQUAD flickering video][SQUADFlickVid]
 
 ### SQUAD: It works\!
 
@@ -56,15 +56,13 @@ After ensuring that all quaternions used by SQUAD were on the same hemisphere wi
 
 The tank can now switch between three different movement modes:
 
-- Direct  
+- [Direct Movement][DirectMovementVid]  
   - Pressing W immediately sets the tank to maximum speed.  
-- Acceleration  
+- [Acceleration][AccelMovementVid]
   - The tank gradually accelerates toward its maximum speed.  
-- Acceleration & Deceleration  
+- [Acceleration & Deceleration][AccelDeaccelMovementVid]
   - The tank accelerates normally, but now also decelerates more naturally when movement input stops.  
   - This gives the movement a heavier and more grounded feeling.
-
-\*insert vids\*
 
 ## Camera
 
@@ -74,3 +72,17 @@ The tank can now switch between three different movement modes:
   - There is no indicator of charging time for the user. Im thinking zooming out the camera should do the trick. 
 
 \*insert vids\*  
+
+[InstantRotVid]: videos/Flicker_SQUAD.mp4
+
+[SLERPVid]: videos/Flicker_SQUAD.mp4
+
+[SQUADFlickVid]: videos/Flicker_SQUAD.mp4
+
+[SQUADFixedVid]: videos/Flicker_SQUAD.mp4
+
+[DirectMovementVid]: videos/instantMovementt.mp4
+
+[AccelMovementVid]: videos/AccelMovementn.mp4
+
+[AccelDeaccelMovementVid]: videos/AccelDeaccelMovement.mp4

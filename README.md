@@ -17,7 +17,7 @@ With instant rotation, the turret immediately snaps toward the target direction.
 
 The downside is that rapid mouse movement, especially when the cursor is very close to the center of the tank, can cause the turret to rotate extremely fast and feel unnatural.
 
-\*insert instant rotation vid\*
+[Instant Rotation Video][RotVid1]
 
 ### SLERP Rotation
 
@@ -32,7 +32,7 @@ A configurable rotation-speed variable was added as well:
 High values make the behavior almost identical to instant rotation.  
 Lower values create slower, heavier turret movement.
 
-\*insert slerp vid\*
+[SLERP Rotation Video][RotVid2]
 
 ### SQUAD: First try
 
@@ -50,7 +50,7 @@ Quaternions can represent the same rotation using opposite signs. If neighboring
 
 After ensuring that all quaternions used by SQUAD were on the same hemisphere with an if statement, the interpolation became stable and smooth. It currently looks like this approach is unnecessarily complicated for the purpose of rotating a turret compared to SLERP.
 
-\*insert squad vid\*
+[SQUAD Rotation Video][RotVid4]
 
 ## Tank Movement\!
 
@@ -67,22 +67,28 @@ The tank can now switch between three different movement modes:
 ## Camera
 
 - For the camera, I want the following quality of life updates:  
-  - FOV zooms out when moving, giving the illusion of action  
-  - The camera moves around, making the tank feel more dynamic.  
-  - There is no indicator of charging time for the user. Im thinking zooming out the camera should do the trick. 
+  - [FOV zooms out when moving][CamVid1], giving the illusion of action  
+  - [The camera moves around][CamVid2], making the tank feel more dynamic.  
+  - There is no indicator of charging time for the user. Im thinking [zooming out the camera][CamVid3] should do the trick. 
 
-\*insert vids\*  
+ 
 
-[InstantRotVid]: videos/Flicker_SQUAD.mp4
+[RotVid1]: videos/instantRotation.mp4
 
-[SLERPVid]: videos/Flicker_SQUAD.mp4
+[RotVid2]: videos/SLERPRotation.mp4
 
 [SQUADFlickVid]: videos/Flicker_SQUAD.mp4
 
-[SQUADFixedVid]: videos/Flicker_SQUAD.mp4
+[RotVid4]: videos/SQUADRotation.mp4
 
 [DirectMovementVid]: videos/instantMovementt.mp4
 
 [AccelMovementVid]: videos/AccelMovementn.mp4
 
 [AccelDeaccelMovementVid]: videos/AccelDeaccelMovement.mp4
+
+[CamVid1]: MoveZoomOut.mp4
+
+[CamVid2]: CameraLookAhead.mp4
+
+[CamVid3]: shootZoomOut.mp4

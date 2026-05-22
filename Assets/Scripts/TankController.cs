@@ -6,7 +6,7 @@ public enum TurretRotationMode
 {
     Instant,
     SLERP,
-    Dampened
+    SQUAD
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -28,8 +28,9 @@ public class TankController : MonoBehaviour
     private float camRayLength = 100f;          // The length of the ray from the camera into the scene.
     
     public TurretRotationMode m_TurretRotationMode = TurretRotationMode.SLERP;  // The rotation mode for the turret.
-    public float m_TurretRotationSpeed = 5f;    // Speed of turret rotation (used for SLERP and Dampened modes).
+    public float m_TurretRotationSpeed = 5f;    // Speed of turret rotation (used for SLERP and SQUAD modes).
     private Quaternion m_TargetTurretRotation;  // The target rotation for the turret.
+    private Quaternion m_PreviousTurretRotation; // Previous rotation for SQUAD interpolation.
 
 
 
@@ -169,13 +170,94 @@ public class TankController : MonoBehaviour
                 );
                 break;
 
-            case TurretRotationMode.Dampened:
-                // Use direction vector with Lerp for a more dampened feel
-                Vector3 currentForward = m_turret.transform.forward;
-                Vector3 targetForward = m_TargetTurretRotation * Vector3.forward;
-                Vector3 dampedForward = Vector3.Lerp(currentForward, targetForward, Time.deltaTime * m_TurretRotationSpeed * 0.5f);
-                m_turret.transform.rotation = Quaternion.LookRotation(dampedForward);
+            case TurretRotationMode.SQUAD:
+                // Spherical Quadrangle Interpolation for smooth quaternion interpolation
+                float t = Time.deltaTime * m_TurretRotationSpeed;
+                Quaternion currentRot = m_turret.transform.rotation;
+                
+                // Calculate control quaternions for SQUAD
+                Quaternion controlA = GetSquadControlPoint(m_PreviousTurretRotation, currentRot, m_TargetTurretRotation);
+                Quaternion controlB = GetSquadControlPoint(currentRot, m_TargetTurretRotation, m_TargetTurretRotation);
+                
+                // Perform SQUAD interpolation
+                m_turret.transform.rotation = Squad(currentRot, controlA, controlB, m_TargetTurretRotation, t);
+                
+                // Update previous rotation for next frame
+                m_PreviousTurretRotation = currentRot;
                 break;
         }
+    }
+
+    /// <summary>
+    /// Calculates a control point for SQUAD interpolation.
+    /// </summary>
+    private Quaternion GetSquadControlPoint(Quaternion before, Quaternion current, Quaternion after)
+    {
+        // Calculate control quaternion using exponential map
+        Quaternion invertCurrent = Quaternion.Inverse(current);
+        Quaternion p0 = invertCurrent * before;
+        Quaternion p2 = invertCurrent * after;
+
+        Quaternion sum = AddQuaternions(QuaternionLog(p0), QuaternionLog(p2));
+        
+        Quaternion controlPoint = current * QuaternionExp(ScaleQuaternion(sum, -0.25f));
+        return controlPoint;
+    }
+
+    /// <summary>
+    /// Scales a quaternion by a scalar value.
+    /// </summary>
+    private Quaternion ScaleQuaternion(Quaternion q, float scale)
+    {
+        return new Quaternion(q.x * scale, q.y * scale, q.z * scale, q.w * scale);
+    }
+
+    /// <summary>
+    /// Adds two quaternions component-wise.
+    /// </summary>
+    private Quaternion AddQuaternions(Quaternion q1, Quaternion q2)
+    {
+        return new Quaternion(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
+    }
+
+    /// <summary>
+    /// Performs Spherical Quadrangle Interpolation (SQUAD) between four quaternions.
+    /// </summary>
+    private Quaternion Squad(Quaternion p0, Quaternion a, Quaternion b, Quaternion p1, float t)
+    {
+        Quaternion slerp1 = Quaternion.Slerp(p0, p1, t);
+        Quaternion slerp2 = Quaternion.Slerp(a, b, t);
+        return Quaternion.Slerp(slerp1, slerp2, 2f * t * (1f - t));
+    }
+
+    /// <summary>
+    /// Calculates the logarithm of a quaternion.
+    /// </summary>
+    private Quaternion QuaternionLog(Quaternion q)
+    {
+        float magnitude = new Vector3(q.x, q.y, q.z).magnitude;
+        if (magnitude < 0.0001f)
+        {
+            return new Quaternion(0, 0, 0, 0);
+        }
+        
+        float angle = Mathf.Atan2(magnitude, q.w);
+        float scale = angle / magnitude;
+        return new Quaternion(q.x * scale, q.y * scale, q.z * scale, 0);
+    }
+
+    /// <summary>
+    /// Calculates the exponential of a quaternion.
+    /// </summary>
+    private Quaternion QuaternionExp(Quaternion q)
+    {
+        float magnitude = new Vector3(q.x, q.y, q.z).magnitude;
+        if (magnitude < 0.0001f)
+        {
+            return new Quaternion(0, 0, 0, 1);
+        }
+        
+        float scale = Mathf.Sin(magnitude) / magnitude;
+        return new Quaternion(q.x * scale, q.y * scale, q.z * scale, Mathf.Cos(magnitude));
     }
 }

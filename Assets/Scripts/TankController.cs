@@ -9,12 +9,23 @@ public enum TurretRotationMode
     SQUAD
 }
 
+public enum MovementMode
+{
+    Direct,
+    Accelerated,
+    AccelerationDeceleration
+}
+
 [RequireComponent(typeof(Rigidbody))]
 public class TankController : MonoBehaviour
 {
     public float m_Speed = 12f;
     public float m_TurnSpeed = 180f;
     public float m_WheelRotateSpeed = 90f;
+    
+    public MovementMode m_MovementMode = MovementMode.AccelerationDeceleration;  // The movement mode for the tank.
+    public float m_Acceleration = 5f;    // How quickly to accelerate (used for Accelerated modes).
+    public float m_Deceleration = 5f;    // How quickly to decelerate (used for AccelerationDeceleration mode).
 
     private Rigidbody m_Rigidbody;              // Reference used to move the tank.
     private string m_MovementAxisName;          // The name of the input axis for moving forward and back.
@@ -23,6 +34,7 @@ public class TankController : MonoBehaviour
     private float m_TurnInputValue;             // The current value of the turn input.
     private Vector3 m_MouseInputValue;          // The current value of the mouse input
     private int floorMask;                      // A layer mask so that a ray can be cast just at gameobjects on the floor layer.
+    private float m_CurrentMovementVelocity;    // Tracks current movement velocity for acceleration modes.
     private List<GameObject> m_wheels = new List<GameObject>();
     private GameObject m_turret;
     private float camRayLength = 100f;          // The length of the ray from the camera into the scene.
@@ -97,6 +109,7 @@ public class TankController : MonoBehaviour
         // Also reset the input values.
         m_MovementInputValue = 0f;
         m_TurnInputValue = 0f;
+        m_CurrentMovementVelocity = 0f;
     }
 
     private void OnDisable()
@@ -107,8 +120,37 @@ public class TankController : MonoBehaviour
 
     private void Move()
     {
-        // Create a vector in the direction the tank is facing with a magnitude based on the input, speed and the time between frames.
-        Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
+        // Calculate target velocity based on input and speed
+        float targetVelocity = m_MovementInputValue * m_Speed;
+        
+        // Apply movement mode
+        switch (m_MovementMode)
+        {
+            case MovementMode.Direct:
+                // Direct mode: instantly respond to input
+                m_CurrentMovementVelocity = targetVelocity;
+                break;
+                
+            case MovementMode.Accelerated:
+                // Accelerated mode: accelerate towards target velocity
+                m_CurrentMovementVelocity = Mathf.Lerp(m_CurrentMovementVelocity, targetVelocity, m_Acceleration * Time.deltaTime);
+                break;
+                
+            case MovementMode.AccelerationDeceleration:
+                // Accelerate when input is present, decelerate when it isn't
+                if (Mathf.Abs(m_MovementInputValue) > 0.1f)
+                {
+                    m_CurrentMovementVelocity = Mathf.Lerp(m_CurrentMovementVelocity, targetVelocity, m_Acceleration * Time.deltaTime);
+                }
+                else
+                {
+                    m_CurrentMovementVelocity = Mathf.Lerp(m_CurrentMovementVelocity, 0f, m_Deceleration * Time.deltaTime);
+                }
+                break;
+        }
+        
+        // Create a vector in the direction the tank is facing with the calculated velocity
+        Vector3 movement = transform.forward * m_CurrentMovementVelocity * Time.deltaTime;
 
         // Apply this movement to the rigidbody's position.
         m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
@@ -129,16 +171,15 @@ public class TankController : MonoBehaviour
 
     private void RotateWheels()
     {
-        // Rotate tank wheels. When tank moves forward, the wheels should rotate forward; When tank moves backwards, the wheels should rotate backwards.
-        // Your code here
-        float direction = m_MovementInputValue;  // get the direction of rotation
+        // Rotate tank wheels based on current movement velocity
+        // Normalize current velocity to -1 to 1 range
+        float direction = m_CurrentMovementVelocity / m_Speed;
         float rotationAmount = -direction * m_WheelRotateSpeed * Time.deltaTime;  // rotation amount
         Quaternion q = Quaternion.Euler(rotationAmount, 0f, 0f);  // rotate around x axis
         for (var i = 0; i < m_wheels.Count; i++)
         {
-            m_wheels[i].transform.localRotation = m_wheels[i].transform.localRotation*q;
+            m_wheels[i].transform.localRotation = m_wheels[i].transform.localRotation * q;
         }
-        
     }
 
     private void RotateTurret()

@@ -25,10 +25,13 @@ namespace CompleteProject
         public float baseFOV = 60f;         // Base FOV when stationary
         public float maxFOV = 75f;          // Maximum FOV when moving fast
         public float fovZoomSpeed = 10f;   // Speed at which to zoom FOV
+        public float shootFOVBoost = 5f;   // FOV increase while shooting
 
         Vector3 offset;                     // The initial offset from the target.
         Rigidbody targetRigidbody;          // Reference to the target's rigidbody for velocity.
         Camera mainCamera;                  // Reference to the main camera.
+        TankController tankController;      // Reference to the tank controller for movement velocity.
+        ShellEmitter shellEmitter;          // Reference to the shell emitter for shooting state.
         Vector3 lookAheadOffset = Vector3.zero; // Current look-ahead offset
         float currentFOV;                   // Current FOV
 
@@ -38,9 +41,11 @@ namespace CompleteProject
             // Calculate the initial offset.
             offset = transform.position - target.position;
 
-            // Get references to rigidbody and camera
+            // Get references to rigidbody, camera, tank controller, and shell emitter
             targetRigidbody = target.GetComponent<Rigidbody>();
             mainCamera = GetComponent<Camera>();
+            tankController = target.GetComponent<TankController>();
+            shellEmitter = target.GetComponentInChildren<ShellEmitter>();
 
             // Initialize FOV
             if (mainCamera != null)
@@ -53,21 +58,19 @@ namespace CompleteProject
 
         void FixedUpdate ()
         {
-            // Calculate forward velocity (velocity in the direction the player is facing)
-            Vector3 forwardVelocity = Vector3.zero;
-            float forwardSpeed = 0f;
-            
-            if (targetRigidbody != null)
-            {
-                forwardVelocity = Vector3.Project(targetRigidbody.velocity, target.forward);
-                forwardSpeed = forwardVelocity.magnitude;
-            }
+            // Get current movement velocity from tank controller
+            float currentMovementVelocity = (tankController != null) ? tankController.m_CurrentMovementVelocity : 0f;
+            float tankMaxSpeed = (tankController != null) ? tankController.m_Speed : 12f;
 
-            // Calculate look-ahead offset only when tank is moving FORWARD
-            if (enableLookAhead && forwardSpeed > 0.5f)
+            // Calculate look-ahead offset based on movement velocity
+            if (enableLookAhead && currentMovementVelocity > 0.5f)
             {
+                // Scale look-ahead distance based on velocity (faster = look further ahead)
+                float velocityRatio = Mathf.Clamp01(currentMovementVelocity / tankMaxSpeed);
+                float scaledLookAheadDistance = Mathf.Lerp(lookAheadDistance * 0.3f, lookAheadDistance, velocityRatio);
+                
                 // Offset camera in the direction the tank body is pointing
-                Vector3 targetLookAhead = target.forward * lookAheadDistance;
+                Vector3 targetLookAhead = target.forward * scaledLookAheadDistance;
                 lookAheadOffset = Vector3.Lerp(lookAheadOffset, targetLookAhead, lookAheadSmoothness * Time.deltaTime);
             }
             else
@@ -91,16 +94,25 @@ namespace CompleteProject
                 transform.position = Vector3.Lerp(transform.position, targetCamPos, smoothing * Time.deltaTime);
             }
 
-            // Update FOV based on forward velocity
+            // Update FOV based on movement velocity
             if (enableFOVZoom && mainCamera != null)
             {
-                // Get tank's max speed from TankController
-                TankController tankController = target.GetComponent<TankController>();
-                float tankMaxSpeed = (tankController != null) ? tankController.m_Speed : 12f;
-
-                // Map forward speed to FOV (0 speed = baseFOV, maxSpeed = maxFOV)
-                float speedRatio = Mathf.Clamp01(forwardSpeed / tankMaxSpeed);
-                float targetFOV = Mathf.Lerp(baseFOV, maxFOV, speedRatio);
+                // Map movement velocity to FOV (0 speed = baseFOV, maxSpeed = maxFOV)
+                float velocityRatio = Mathf.Clamp01(currentMovementVelocity / tankMaxSpeed);
+                float targetFOV = Mathf.Lerp(baseFOV, maxFOV, velocityRatio);
+                
+                // Add FOV boost when holding left click to shoot (but not after shell is fired)
+                if (Input.GetMouseButton(0) && (shellEmitter == null || !shellEmitter.m_Fired))
+                {
+                    // Calculate charge progress (0 to 1 over maxChargeTime)
+                    float chargeForceRange = shellEmitter.m_MaxLaunchForce - shellEmitter.m_MinLaunchForce;
+                    float chargeProgress = Mathf.Clamp01((shellEmitter.m_CurrentLaunchForce - shellEmitter.m_MinLaunchForce) / chargeForceRange);
+                    
+                    // Lerp the boost amount based on charge progress over maxChargeTime
+                    float boostAmount = Mathf.Lerp(0f, shootFOVBoost, chargeProgress);
+                    targetFOV += boostAmount;
+                }
+                
                 currentFOV = Mathf.Lerp(currentFOV, targetFOV, fovZoomSpeed * Time.deltaTime);
                 mainCamera.fieldOfView = currentFOV;
             }

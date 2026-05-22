@@ -34,7 +34,7 @@ public class TankController : MonoBehaviour
     private float m_TurnInputValue;             // The current value of the turn input.
     private Vector3 m_MouseInputValue;          // The current value of the mouse input
     private int floorMask;                      // A layer mask so that a ray can be cast just at gameobjects on the floor layer.
-    private float m_CurrentMovementVelocity;    // Tracks current movement velocity for acceleration modes.
+    public float m_CurrentMovementVelocity;     // Tracks current movement velocity for acceleration modes.
     private List<GameObject> m_wheels = new List<GameObject>();
     private GameObject m_turret;
     private float camRayLength = 100f;          // The length of the ray from the camera into the scene.

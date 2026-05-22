@@ -65,7 +65,10 @@ public class TankController : MonoBehaviour
     {        
         m_MovementAxisName = "Vertical";
         m_TurnAxisName = "Horizontal";
-
+        
+        // Initialize quaternions to prevent invalid interpolation in first frames
+        m_PreviousTurretRotation = m_turret.transform.rotation;
+        m_TargetTurretRotation = m_turret.transform.rotation;
     }
 
     private void Update()
@@ -172,8 +175,19 @@ public class TankController : MonoBehaviour
 
             case TurretRotationMode.SQUAD:
                 // Spherical Quadrangle Interpolation for smooth quaternion interpolation
-                float t = Time.deltaTime * m_TurretRotationSpeed;
+                float t = Mathf.Clamp01(Time.deltaTime * m_TurretRotationSpeed);
                 Quaternion currentRot = m_turret.transform.rotation;
+                
+                // Ensure quaternions are on the same hemisphere to prevent sign ambiguity flipping
+                if (Quaternion.Dot(currentRot, m_TargetTurretRotation) < 0f)
+                {
+                    m_TargetTurretRotation = new Quaternion(
+                        -m_TargetTurretRotation.x,
+                        -m_TargetTurretRotation.y,
+                        -m_TargetTurretRotation.z,
+                        -m_TargetTurretRotation.w
+                    );
+                }
                 
                 // Calculate control quaternions for SQUAD
                 Quaternion controlA = GetSquadControlPoint(m_PreviousTurretRotation, currentRot, m_TargetTurretRotation);
@@ -188,9 +202,7 @@ public class TankController : MonoBehaviour
         }
     }
 
-    /// <summary>
     /// Calculates a control point for SQUAD interpolation.
-    /// </summary>
     private Quaternion GetSquadControlPoint(Quaternion before, Quaternion current, Quaternion after)
     {
         // Calculate control quaternion using exponential map
@@ -204,25 +216,19 @@ public class TankController : MonoBehaviour
         return controlPoint;
     }
 
-    /// <summary>
     /// Scales a quaternion by a scalar value.
-    /// </summary>
     private Quaternion ScaleQuaternion(Quaternion q, float scale)
     {
         return new Quaternion(q.x * scale, q.y * scale, q.z * scale, q.w * scale);
     }
-
-    /// <summary>
+ 
     /// Adds two quaternions component-wise.
-    /// </summary>
     private Quaternion AddQuaternions(Quaternion q1, Quaternion q2)
     {
         return new Quaternion(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
     }
 
-    /// <summary>
     /// Performs Spherical Quadrangle Interpolation (SQUAD) between four quaternions.
-    /// </summary>
     private Quaternion Squad(Quaternion p0, Quaternion a, Quaternion b, Quaternion p1, float t)
     {
         Quaternion slerp1 = Quaternion.Slerp(p0, p1, t);
@@ -230,9 +236,7 @@ public class TankController : MonoBehaviour
         return Quaternion.Slerp(slerp1, slerp2, 2f * t * (1f - t));
     }
 
-    /// <summary>
     /// Calculates the logarithm of a quaternion.
-    /// </summary>
     private Quaternion QuaternionLog(Quaternion q)
     {
         float magnitude = new Vector3(q.x, q.y, q.z).magnitude;
@@ -246,9 +250,7 @@ public class TankController : MonoBehaviour
         return new Quaternion(q.x * scale, q.y * scale, q.z * scale, 0);
     }
 
-    /// <summary>
     /// Calculates the exponential of a quaternion.
-    /// </summary>
     private Quaternion QuaternionExp(Quaternion q)
     {
         float magnitude = new Vector3(q.x, q.y, q.z).magnitude;

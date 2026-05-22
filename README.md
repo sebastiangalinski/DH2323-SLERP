@@ -42,7 +42,7 @@ While SLERP interpolates smoothly between two rotations, SQUAD extends this idea
 
 Current problem: the turret seems to have a few fixed places where it wants to be. It basically flickers all the time. 
 
-\*Insert Gif of flickering\*
+![][SQUADFlickVid] 
 
 ### SQUAD: It works\!
 
